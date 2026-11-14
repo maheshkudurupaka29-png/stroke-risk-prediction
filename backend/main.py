@@ -6,6 +6,7 @@ from pathlib import Path
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import Any
+from fastapi.middleware.cors import CORSMiddleware
 
 # Step 1: Load saved ML model
 MODEL_PATH = Path(__file__).resolve().parent.parent / "stroke_model.pkl"
@@ -27,6 +28,14 @@ clip_bounds = artifact['clip_bounds']
 
 # Step 2: Create FastAPI application
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=False,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Step 3: Define input format
 class PredictionInput(BaseModel):
